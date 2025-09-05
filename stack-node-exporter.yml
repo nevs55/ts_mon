@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  node-exporter:
+    image: prom/node-exporter:v1.8.2
+    container_name: node-exporter
+    # Host network lets the exporter see host metrics.
+    # Access is controlled by your Tailscale ACLs (recommended).
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    command:
+      - "--path.rootfs=/host"
+      # If you want to bind ONLY to the Tailscale interface, uncomment the next line and set your node's Tailscale IP.
+      # - "--web.listen-address=100.x.y.z:9100"
+    volumes:
+      - "/:/host:ro,rslave"
+    # Security options for read-only rootfs are omitted for simplicity in Portainer; feel free to harden further.

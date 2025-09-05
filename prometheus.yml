@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # --- Node Exporter running on each Tailscale node ---
+  - job_name: 'tailscale-nodes'
+    scrape_interval: 15s
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      # Replace these targets with your nodes' MagicDNS names or Tailscale IPs.
+      # Using MagicDNS (recommended):
+      # - targets: ['host-a.tailnet-name.ts.net:9100', 'host-b.tailnet-name.ts.net:9100']
+      - targets: ['REPLACE_ME_NODE_A:9100', 'REPLACE_ME_NODE_B:9100']
+        labels:
+          env: 'prod'
+          site: 'home'
+
+  # --- Optional: cAdvisor for container-level metrics on hosts where it runs ---
+  - job_name: 'cadvisor'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['REPLACE_ME_NODE_A:8080']
+        labels:
+          env: 'prod'
+          site: 'home'
